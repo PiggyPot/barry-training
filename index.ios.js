@@ -12,6 +12,8 @@ import {
   Text,
   View
 } from 'react-native';
+import data from './store.js';
+import _ from 'lodash';
 
 export default class training extends Component {
   render() {
@@ -24,28 +26,27 @@ export default class training extends Component {
             <Text style={styles.navTopItem}>A</Text>
           </View>
           <View style={styles.navRow}>
-            <NavBottomItem label={'Goals met'} value={'1/5'} />
+            <NavBottomItem label='Goals met' value='1/5' />
             <View style={{backgroundColor: 'rgba(0,0,0,0.2)', width: 1, height: '75%'}}/>
             <NavBottomItem label={'In my pots'} value={'£1234.56'} />
             <NavBottomItem label={'Next deposit'} value={'£12.50 - 13 Dec'} style={{backgroundColor: '#09375b', borderWidth: 1, borderRadius: 3, borderColor: '#09375b', padding: 5}} />
           </View>
         </View>
         <ScrollView style={{width: '100%', padding: 10}}>
-          <View style={{alignItems: 'flex-start'}}>
-            <Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>ACTIVE POTS (3)</Text>
-            <View style={{flexDirection: 'row', height: 65}}>
-              <View style={{width: 5, backgroundColor: 'rgba(0,0,0,0.1)', justifyContent: 'flex-end', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}}>
-                <View style={{backgroundColor: '#f28eb1', width: 5, height: '100%', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}} />
+          {['ACTIVE', 'COMPLETE'].map((status, i) => {
+            return (
+              <View style={{alignItems: 'flex-start'}} key={i}>
+                <Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>{status} POTS ({_.filter(data, {status: status}).length})</Text>
+                {_.filter(data, {status:status}).map((pot, j) => {
+                  return <PotListItem {...pot} key={j} />
+                })}
               </View>
-              <View style={{backgroundColor: '#fff', flexGrow: 1, justifyContent: 'space-between', padding: 10, borderTopRightRadius: 3, borderBottomRightRadius: 3, shadowOffset:{width: 0, height: 1}, shadowColor: 'black', shadowOpacity: 0.1, shadowRadius: 1}}>
-                <Text style={{fontWeight: 'bold', fontSize: 16, color: '#103d60'}}>Summer Holiday</Text>
-                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <Text style={{fontSize: 12}}>£550 of £600</Text>
-                  <Text style={{fontSize: 12}}>£12.50 pw</Text>
-                </View>
-              </View>
-            </View>
-          </View>
+            )
+          })}
+          {_.filter(data, {status: 'ARCHIVED'}).length > 0
+            ? <View style={{flexDirection: 'row', justifyContent:'space-between', padding: 10}}><Text style={{color: '#09375b'}}>View archived goals</Text><Text style={{color: '#09375b'}}>></Text></View>
+            : null
+          }
         </ScrollView>
       </View>
     );
@@ -58,6 +59,31 @@ class NavBottomItem extends Component {
       <View style={this.props.style}>
         <Text style={{color: '#fff', fontSize: 12}}>{this.props.label}</Text>
         <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>{this.props.value}</Text>
+      </View>
+    )
+  }
+}
+
+class PotListItem extends Component {
+  render() {
+    const sum = _(this.props.transactions).filter({status: 'COMPLETE'}).map('amount').sum();
+    const percentage = '' + (sum / this.props.savingTarget) * 100 + '%';
+    const progressColour = this.props.status === 'COMPLETE' ? '#22e087' : '#f28eb1';
+    const timelineText = this.props.status === 'ACTIVE'
+      ? <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>£{this.props.transactions[0].amount} {this.props.depositInterval === 'WEEKLY' ? 'pw' : 'pm'}</Text>
+      : <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>Saved in 2 days</Text>
+    return (
+      <View style={{flexDirection: 'row', height: 65, marginBottom: 10}}>
+        <View style={{width: 5, backgroundColor: 'rgba(0,0,0,0.1)', justifyContent: 'flex-end', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}}>
+          <View style={{backgroundColor: progressColour, width: 5, height: percentage, borderBottomLeftRadius: 3, borderTopLeftRadius: 3}} />
+        </View>
+        <View style={{backgroundColor: '#fff', flexGrow: 1, justifyContent: 'space-between', padding: 10, borderTopRightRadius: 3, borderBottomRightRadius: 3, shadowOffset:{width: 0, height: 1}, shadowColor: 'black', shadowOpacity: 0.1, shadowRadius: 1}}>
+          <Text style={{fontWeight: 'bold', fontSize: 16, color: '#103d60'}}>{this.props.name}</Text>
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}><Text style={{fontWeight: 'bold', color: '#1ba0f0'}}>£{sum}</Text> of £{this.props.savingTarget}</Text>
+            {timelineText}
+          </View>
+        </View>
       </View>
     )
   }
