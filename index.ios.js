@@ -30,7 +30,22 @@ export default class training extends Component {
             <NavBottomItem label={'Next deposit'} value={'£12.50 - 13 Dec'} style={{backgroundColor: '#09375b', borderWidth: 1, borderRadius: 3, borderColor: '#09375b', padding: 5}} />
           </View>
         </View>
-        <ScrollView>
+        <ScrollView style={{width: '100%', padding: 10}}>
+          <View style={{alignItems: 'flex-start'}}>
+            <Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>ACTIVE POTS (3)</Text>
+            <View style={{flexDirection: 'row', height: 65}}>
+              <View style={{width: 5, backgroundColor: 'rgba(0,0,0,0.1)', justifyContent: 'flex-end', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}}>
+                <View style={{backgroundColor: '#f28eb1', width: 5, height: '100%', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}} />
+              </View>
+              <View style={{backgroundColor: '#fff', flexGrow: 1, justifyContent: 'space-between', padding: 10, borderTopRightRadius: 3, borderBottomRightRadius: 3, shadowOffset:{width: 0, height: 1}, shadowColor: 'black', shadowOpacity: 0.1, shadowRadius: 1}}>
+                <Text style={{fontWeight: 'bold', fontSize: 16, color: '#103d60'}}>Summer Holiday</Text>
+                <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Text style={{fontSize: 12}}>£550 of £600</Text>
+                  <Text style={{fontSize: 12}}>£12.50 pw</Text>
+                </View>
+              </View>
+            </View>
+          </View>
         </ScrollView>
       </View>
     );
@@ -53,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    backgroundColor: '#F5FCFF',
+    backgroundColor: '#ecf1f6',
   },
   navContainer: {
     backgroundColor: '#1684e2',
