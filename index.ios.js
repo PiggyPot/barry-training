@@ -7,6 +7,7 @@
 import React, { Component } from 'react';
 import {
   AppRegistry,
+  ScrollView,
   StyleSheet,
   Text,
   View
@@ -16,38 +17,61 @@ export default class training extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>
-          Welcome to React Native!
-        </Text>
-        <Text style={styles.instructions}>
-          To get started, edit index.ios.js
-        </Text>
-        <Text style={styles.instructions}>
-          Press Cmd+R to reload,{'\n'}
-          Cmd+D or shake for dev menu
-        </Text>
+        <View style={styles.navContainer}>
+          <View style={[styles.navRow, {paddingBottom: 0}]}>
+            <Text style={styles.navTopItem}>S</Text>
+            <Text style={[styles.navTopItem, {fontSize: 18, fontWeight: 'bold'}]}>My Pots</Text>
+            <Text style={styles.navTopItem}>A</Text>
+          </View>
+          <View style={styles.navRow}>
+            <NavBottomItem label={'Goals met'} value={'1/5'} />
+            <View style={{backgroundColor: 'rgba(0,0,0,0.2)', width: 1, height: '75%'}}/>
+            <NavBottomItem label={'In my pots'} value={'£1234.56'} />
+            <NavBottomItem label={'Next deposit'} value={'£12.50 - 13 Dec'} style={{backgroundColor: '#09375b', borderWidth: 1, borderRadius: 3, borderColor: '#09375b', padding: 5}} />
+          </View>
+        </View>
+        <ScrollView>
+        </ScrollView>
       </View>
     );
+  }
+}
+
+class NavBottomItem extends Component {
+  render() {
+    return (
+      <View style={this.props.style}>
+        <Text style={{color: '#fff', fontSize: 12}}>{this.props.label}</Text>
+        <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>{this.props.value}</Text>
+      </View>
+    )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
   },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
+  navContainer: {
+    backgroundColor: '#1684e2',
+    flexGrow: 0,
+    width: '100%',
+    paddingTop: 20
   },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
+  navRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 10
   },
+  navTopItem: {
+    flexGrow: 0,
+    textAlign: 'center',
+    color: 'white'
+  }
 });
 
 AppRegistry.registerComponent('training', () => training);
