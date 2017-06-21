@@ -1,118 +1,12 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- * @flow
- */
+import { AppRegistry } from 'react-native';
+import { StackNavigator } from 'react-navigation';
 
-import React, { Component } from 'react';
-import {
-  AppRegistry,
-  ScrollView,
-  StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import data from './store.js';
-import _ from 'lodash';
+import { PotListView, PotView } from './scenes';
 
-export default class training extends Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.navContainer}>
-          <View style={[styles.navRow, {paddingBottom: 0}]}>
-            <Text style={styles.navTopItem}>S</Text>
-            <Text style={[styles.navTopItem, {fontSize: 18, fontWeight: 'bold'}]}>My Pots</Text>
-            <Text style={styles.navTopItem}>A</Text>
-          </View>
-          <View style={styles.navRow}>
-            <NavBottomItem label='Goals met' value='1/5' />
-            <View style={{backgroundColor: 'rgba(0,0,0,0.2)', width: 1, height: '75%'}}/>
-            <NavBottomItem label={'In my pots'} value={'£1234.56'} />
-            <NavBottomItem label={'Next deposit'} value={'£12.50 - 13 Dec'} style={{backgroundColor: '#09375b', borderWidth: 1, borderRadius: 3, borderColor: '#09375b', padding: 5}} />
-          </View>
-        </View>
-        <ScrollView style={{width: '100%', padding: 10}}>
-          {['ACTIVE', 'COMPLETE'].map((status, i) => {
-            return (
-              <View style={{alignItems: 'flex-start'}} key={i}>
-                <Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>{status} POTS ({_.filter(data, {status: status}).length})</Text>
-                {_.filter(data, {status:status}).map((pot, j) => {
-                  return <PotListItem {...pot} key={j} />
-                })}
-              </View>
-            )
-          })}
-          {_.filter(data, {status: 'ARCHIVED'}).length > 0
-            ? <View style={{flexDirection: 'row', justifyContent:'space-between', padding: 10}}><Text style={{color: '#09375b'}}>View archived goals</Text><Text style={{color: '#09375b'}}>></Text></View>
-            : null
-          }
-        </ScrollView>
-      </View>
-    );
-  }
-}
 
-class NavBottomItem extends Component {
-  render() {
-    return (
-      <View style={this.props.style}>
-        <Text style={{color: '#fff', fontSize: 12}}>{this.props.label}</Text>
-        <Text style={{color: '#fff', fontSize: 14, fontWeight: 'bold'}}>{this.props.value}</Text>
-      </View>
-    )
-  }
-}
-
-class PotListItem extends Component {
-  render() {
-    const sum = _(this.props.transactions).filter({status: 'COMPLETE'}).map('amount').sum();
-    const percentage = '' + (sum / this.props.savingTarget) * 100 + '%';
-    const progressColour = this.props.status === 'COMPLETE' ? '#22e087' : '#f28eb1';
-    const timelineText = this.props.status === 'ACTIVE'
-      ? <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>£{this.props.transactions[0].amount} {this.props.depositInterval === 'WEEKLY' ? 'pw' : 'pm'}</Text>
-      : <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>Saved in 2 days</Text>
-    return (
-      <View style={{flexDirection: 'row', height: 65, marginBottom: 10}}>
-        <View style={{width: 5, backgroundColor: 'rgba(0,0,0,0.1)', justifyContent: 'flex-end', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}}>
-          <View style={{backgroundColor: progressColour, width: 5, height: percentage, borderBottomLeftRadius: 3, borderTopLeftRadius: 3}} />
-        </View>
-        <View style={{backgroundColor: '#fff', flexGrow: 1, justifyContent: 'space-between', padding: 10, borderTopRightRadius: 3, borderBottomRightRadius: 3, shadowOffset:{width: 0, height: 1}, shadowColor: 'black', shadowOpacity: 0.1, shadowRadius: 1}}>
-          <Text style={{fontWeight: 'bold', fontSize: 16, color: '#103d60'}}>{this.props.name}</Text>
-          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}><Text style={{fontWeight: 'bold', color: '#1ba0f0'}}>£{sum}</Text> of £{this.props.savingTarget}</Text>
-            {timelineText}
-          </View>
-        </View>
-      </View>
-    )
-  }
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
-    backgroundColor: '#ecf1f6',
-  },
-  navContainer: {
-    backgroundColor: '#1684e2',
-    flexGrow: 0,
-    width: '100%',
-    paddingTop: 20
-  },
-  navRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    padding: 10
-  },
-  navTopItem: {
-    flexGrow: 0,
-    textAlign: 'center',
-    color: 'white'
-  }
+const App = StackNavigator({
+  PotList: { screen: PotListView },
+  Pot: { screen: PotView }
 });
 
-AppRegistry.registerComponent('training', () => training);
+AppRegistry.registerComponent('training', () => App);
