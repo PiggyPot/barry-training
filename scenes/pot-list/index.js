@@ -53,6 +53,12 @@ class PotListView extends React.Component {
     return <View><Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>{category} POTS ({_.filter(data, {status: category}).length})</Text></View>
   }
 
+  renderFooter() {
+    return _.filter(data, {status: 'ARCHIVED'}).length > 0
+      ? <View style={{flexDirection: 'row', justifyContent:'space-between', padding: 10, paddingLeft: 20, paddingRight: 20}}><Text style={{color: '#09375b'}}>View archived goals</Text><Text style={{color: '#09375b'}}>></Text></View>
+      : null
+  }
+
   render() {
     let sectionedData = {};
     data.map((pot) => {
@@ -72,24 +78,8 @@ class PotListView extends React.Component {
           style={styles.potList}
           dataSource={ds.cloneWithRowsAndSections(sectionedData)}
           renderRow={this.renderRow.bind(this)}
-          renderSectionHeader={this.renderSectionHeader} />
-
-        {/*<ScrollView style={{width: '100%', padding: 10}}>
-          {['ACTIVE', 'COMPLETE'].map((status, i) => {
-            return (
-              <View style={{alignItems: 'flex-start'}} key={i}>
-                <Text style={{padding: 10, fontWeight: 'bold', color: 'rgba(0,0,0,0.25)'}}>{status} POTS ({_.filter(data, {status: status}).length})</Text>
-                {_.filter(data, {status:status}).map((pot, j) => {
-                  return <PotListItem {...pot} key={j} />
-                })}
-              </View>
-            )
-          })}
-          {_.filter(data, {status: 'ARCHIVED'}).length > 0
-            ? <View style={{flexDirection: 'row', justifyContent:'space-between', padding: 10}}><Text style={{color: '#09375b'}}>View archived goals</Text><Text style={{color: '#09375b'}}>></Text></View>
-            : null
-          }
-        </ScrollView>*/}
+          renderSectionHeader={this.renderSectionHeader}
+          renderFooter={this.renderFooter}/>
       </View>
     );
   }
@@ -105,7 +95,7 @@ class PotListItem extends Component {
       : <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>Saved in 2 days</Text>
     return (
       <TouchableWithoutFeedback onPress={this.props.onPress}>
-        <View style={{flexDirection: 'row', height: 65, marginBottom: 10}}>
+        <View style={{flexDirection: 'row', height: 65, marginBottom: 10, paddingLeft: 10, paddingRight: 10}}>
           <View style={{width: 5, backgroundColor: 'rgba(0,0,0,0.1)', justifyContent: 'flex-end', borderBottomLeftRadius: 3, borderTopLeftRadius: 3}}>
             <View style={{backgroundColor: progressColour, width: 5, height: percentage, borderBottomLeftRadius: 3, borderTopLeftRadius: 3}} />
           </View>

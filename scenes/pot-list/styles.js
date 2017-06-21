@@ -9,8 +9,6 @@ const styles = StyleSheet.create({
   },
   potList: {
     width: '100%',
-    padding: 10,
-    paddingTop: 0
   }
 })
 
