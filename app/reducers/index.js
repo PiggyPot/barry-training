@@ -134,9 +134,10 @@ const initialState = {
 export default function pots(state = initialState, action) {
   switch(action.type) {
     case 'SET_ACTIVE_POT':
-    return {
-      ...state,
-      activePot: action.id
-    }
+      return {
+        ...state,
+        activePot: action.id
+      }
+    return state;
   }
 }
