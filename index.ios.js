@@ -5,8 +5,8 @@ import { PotListView, PotView } from './scenes';
 
 
 const App = StackNavigator({
+  Pot: { screen: PotView },
   PotList: { screen: PotListView },
-  Pot: { screen: PotView }
 });
 
 AppRegistry.registerComponent('training', () => App);

@@ -7,7 +7,7 @@ class PotSummary extends React.Component {
     return(
       <View style={styles.container}>
         <View style={styles.row}><Text>Progress</Text><Text>Amount</Text></View>
-        <View style={styles.row}><Text>Pot Name</Text><Text>Options</Text></View>
+        <View style={styles.row}><Text>Pot Details</Text><Text>Options</Text></View>
       </View>
     )
   }

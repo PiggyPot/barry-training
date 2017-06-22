@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View } from 'react-native';
 import PotSummary from './summary';
+import Deposits from './deposits';
 
 class PotView extends React.Component {
   static navigationOptions = ({navigation}) => {
@@ -16,6 +17,7 @@ class PotView extends React.Component {
     return(
       <View>
         <PotSummary />
+        <Deposits />
       </View>
     )
   }
