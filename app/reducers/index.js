@@ -138,6 +138,7 @@ export default function pots(state = initialState, action) {
         ...state,
         activePot: action.id
       }
-    return state;
+    default:
+      return state;
   }
 }
