@@ -7,7 +7,7 @@ import styles from './styles.js'
 PotList = (props) => {
   return (
     <View style={styles.container}>
-      <PotsSummary />
+      <PotsSummary {...props.summaryData} />
       <PotsList {...props} />
     </View>
   )

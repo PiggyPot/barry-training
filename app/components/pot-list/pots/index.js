@@ -9,13 +9,13 @@ PotsList = (props) => {
       style={styles.potList}
       sections={props.listData}
       keyExtractor={item => item.id}
-      renderItem={(item) => <PotListItem nav={props.navigation} {...item} />}
+      renderItem={(item) => <PotListItem {...props} {...item} />}
       renderSectionHeader={SectionHeader}
       ListFooterComponent={() => <Footer pots={props.archivedPots} />}/>
   )
 }
 
-PotListItem = ({nav, item}) => {
+PotListItem = ({navigateToPot, item}) => {
   const sum = _(item.transactions).filter({status: 'COMPLETE'}).map('amount').sum();
   const percentage = '' + (sum / item.savingTarget) * 100 + '%';
   const progressColour = item.status === 'COMPLETE' ? '#22e087' : '#f28eb1';
@@ -24,7 +24,7 @@ PotListItem = ({nav, item}) => {
     : <Text style={{fontSize: 12, color: 'rgba(0,0,0,0.5)'}}>Saved in 2 days</Text>
 
   return(
-    <TouchableWithoutFeedback>
+    <TouchableWithoutFeedback onPress={() => navigateToPot(item.id)}>
       <View style={styles.listItem}>
         <View style={styles.progressBar}>
           <View style={[styles.progressBarFill, {backgroundColor: progressColour, height: percentage}]} />

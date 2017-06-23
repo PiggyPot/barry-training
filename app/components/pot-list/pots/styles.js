@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
   },
   sectionHeader: {
     padding: 10,
+    paddingLeft: 25,
     fontWeight: 'bold',
     color: 'rgba(0,0,0,0.25)'
   },
