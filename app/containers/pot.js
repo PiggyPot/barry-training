@@ -17,9 +17,9 @@ class Pot extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
-    pot: getActivePot(state)
+    pot: getActivePot(state, ownProps.navigation.state.params)
   }
 }
 

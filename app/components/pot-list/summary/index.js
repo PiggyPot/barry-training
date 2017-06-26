@@ -8,8 +8,8 @@ PotsSummary = (props) => {
       <View style={styles.summary}>
         <SummaryItem label='Goals met' value={props.goals} />
         <View style={styles.separator}/>
-        <SummaryItem label={'In my pots'} value={props.potTotals} />
-        <SummaryItem label={'Next deposit'} value={props.nextDeposit} style={styles.nextDeposit} />
+        <SummaryItem label={'In my pots'} value={props.totals} />
+        <SummaryItem label={'Next deposit'} value={props.deposit.amount} style={styles.nextDeposit} />
       </View>
     </View>
   )

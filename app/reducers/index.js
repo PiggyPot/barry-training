@@ -1,5 +1,5 @@
 const initialState = {
-  activePot: 1,
+  activePotId: 1,
   pots: [
   {
     id: 1,

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { PotListView } from '../components';
-import { getSectionedPots, getArchivedPots, getSummaryData } from '../selectors';
+import { getSectionedPots, getArchivedPots, getSummaryData, getSummaryTotals } from '../selectors';
 
 class PotList extends React.Component {
   static navigationOptions = {
@@ -17,24 +17,15 @@ class PotList extends React.Component {
   }
 }
 
-function mapStateToProps(state) {
+function mapStateToProps(state, ownProps) {
   return {
     listData: getSectionedPots(state),
     archivedPots: getArchivedPots(state),
-    summaryData: getSummaryData(state)
-  }
-}
-
-function mapDispatchToProps(dispatch, ownProps) {
-  return {
+    summaryData: getSummaryData(state),
     navigateToPot: (id) => {
-      dispatch({
-        type: 'SET_ACTIVE_POT',
-        id: id
-      })
-      ownProps.navigation.navigate('Pot');
+      ownProps.navigation.navigate('Pot', id);
     }
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PotList);
+export default connect(mapStateToProps)(PotList);

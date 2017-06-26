@@ -1,47 +1,79 @@
-import React from 'react';
-import { Text } from 'react-native';
-import Currency from '../components/common';
 import _ from 'lodash';
+import { createSelector } from 'reselect';
+import { filter, find, reduce } from 'lodash/fp';
 
-export const getSectionedPots = ({pots}) => {
-  let sectionedPots = [];
+export const getAllPots = state => state.pots;
+export const getActivePotId = state => state.activePotId
 
-  pots.map((pot) => {
-    if(pot.status === 'ARCHIVED')
-      return;
-    if(_.filter(sectionedPots, {title:pot.status}).length === 0)
-      sectionedPots.push({title: pot.status, data: [pot]})
-    else
-      sectionedPots[_.findIndex(sectionedPots, {status: pot.status})].data.push(pot);
-  })
-  return sectionedPots;
-}
+export const getActivePots = createSelector(
+  getAllPots,
+  filter(['status', 'ACTIVE'])
+)
 
-export const getArchivedPots = ({pots}) => {
-  return _.filter(pots, {status:'ARCHIVED'})
-}
+export const getCompletePots = createSelector(
+  getAllPots,
+  filter(['status', 'COMPLETE'])
+)
 
-export const getSummaryData = ({pots}) => {
-  let summary = {};
-  summary.goals = _.filter(pots, ((x) => {return x.status === 'COMPLETE'})).length + '/' + _.filter(pots, ((x) => {return x.status !== 'ARCHIVED'})).length;
+export const getArchivedPots = createSelector(
+  getAllPots,
+  filter(['status', 'ARCHIVED'])
+)
 
-  const potTotals = pots.reduce((total, pot) => {
-    if(pot.status !== 'ARCHIVED')
-      return pot.transactions.reduce((subTotal, transaction) => {
-        if(transaction.status === 'COMPLETE')
-          return transaction.amount + subTotal
-        return subTotal;
-      }, 0) + total;
-    return total;
-  }, 0);
+export const getSectionedPots = createSelector(
+  getActivePots,
+  getCompletePots,
+  (active, complete) => {
+    return [
+      {title: 'ACTIVE', data: active},
+      {title: 'COMPLETE', data: complete}
+    ]
+  }
+)
 
-  summary.potTotals = <Currency value={potTotals} />
+export const getSummaryGoals = createSelector(
+  getActivePots,
+  getCompletePots,
+  (active, complete) => {
+    return active.length + '/' + (active.length + complete.length)
+  }
+)
 
-  summary.nextDeposit = <Text><Currency value='12.50'/> - 13 Dec</Text>;
+export const getSummaryTotals = createSelector(
+  getActivePots,
+  getCompletePots,
+  (active, complete) => {
+    return reduce((total, pot) => {
+      return reduce((subtotal, transaction) => {
+        return transaction.status === 'COMPLETE' ? (transaction.amount + subtotal) : subtotal;
+      }, 0)(pot.transactions) + total;
+    }, 0)([...active, ...complete])
+  }
+)
 
-  return summary;
-}
+export const getSummaryDeposit = createSelector(
+  getActivePots,
+  (active) => {
+    return {
+      date: new Date(),
+      amount: 12.50
+    }
+  }
+)
 
-export const getActivePot = ({pots, activePot}) => {
-  return _.filter(pots, {id: activePot})[0]
-}
+export const getSummaryData = createSelector(
+  getSummaryGoals,
+  getSummaryTotals,
+  getSummaryDeposit,
+  (goals, totals, deposit) => {
+    return {goals, totals, deposit}
+  }
+)
+
+export const getActivePot = createSelector(
+  getAllPots,
+  getActivePotId,
+  (pots, id) => {
+    return find({id})(pots)
+  }
+)
